@@ -3,11 +3,11 @@ import TailBall from "../components/TailBall"
 import TailButton from "../components/TailButton"
 
 export default function Lotto() {
-  const [tags, setTags] = useState([]) ;
+  const [tags, setTags] = useState<React.ReactElement[]>([]) ;
 
   const handleClick = () => {
     //set으로 선언
-    let nums = new Set([]) ;
+    let nums : Set<number> = new Set([]) ;
 
     while ( nums.size < 7) {
       let n= Math.floor(Math.random()*45 + 1) ;
@@ -16,13 +16,14 @@ export default function Lotto() {
     }
 
     //set => array로 변환
-    nums = Array.from(nums);
-    let bonus = nums.pop() ;
+    let numArr : number[] ;
+    numArr = Array.from(nums);
+    let bonus = numArr.pop() ;
 
-    nums.sort((a, b) => a-b) ;
+    numArr.sort((a, b) => a-b) ;
     
     //태그 만들기 
-    let tm = nums.map( item => <TailBall n={item} key={item} />) ;
+    let tm = numArr.map( item => <TailBall n={item} key={item} />) ;
     tm = [...tm , <div className="w-20 h-20 
                                   text-4xl font-bold
                                   flex justify-center items-center"

@@ -1,23 +1,25 @@
 import { useState, useEffect, useRef } from "react"
 import TailCard from "../components/TailCard"
 import { Link , useSearchParams } from "react-router-dom";
+import type { FestivalType } from "./festivaltype";
 
 export default function Festival() {
-  const [tdata, setTdata] = useState([]) ;
-  const [area, setArea] = useState([]) ;
-  const [areaFestival, setAreaFestival] = useState([]) ;
-  const [gu, setGu] = useState() ;
+  const [tdata, setTdata] = useState<FestivalType[]>([]) ;
+  const [area, setArea] = useState<React.ReactElement[]>([]) ;
+  const [areaFestival, setAreaFestival] = useState<FestivalType[]>([]) ;
+  const [gu, setGu] = useState<string | null>() ;
 
-  const selRef = useRef(); 
+  const selRef = useRef<HTMLSelectElement>(null); 
   const [sParams] = useSearchParams() ;
    
   const handleChange = () => {
-    setGu(selRef.current.value) ;
-    if (selRef.current.value == ""){
+    setGu(selRef.current?.value) ;
+    if (selRef.current?.value == ""){
       setAreaFestival([]) ;
       return ;
     } 
-    let tm = tdata.filter(item => item.GUGUN_NM == selRef.current.value) ;
+
+    let tm = tdata.filter(item => item.GUGUN_NM == selRef.current?.value) ;
     setAreaFestival(tm) ;
   }
 
@@ -27,10 +29,10 @@ export default function Festival() {
     let url = `${baseUrl}serviceKey=${apikey}`;
     url = `${url}&pageNo=1&numOfRows=45&resultType=json`;
 
-    // console.log(url)
-
     const resp = await fetch(url) ;
     const data = await resp.json() ;
+
+    console.log(data.getFestivalKr.item)
     setTdata(data.getFestivalKr.item)
   }
 
@@ -40,15 +42,18 @@ export default function Festival() {
 
   useEffect(() => {
     // console.log(selRef.current.value)
-    if (sParams.get("gu") != "") {
-      console.log(sParams.get("gu"))
-      selRef.current.value = sParams.get("gu") ;
-      setGu(sParams.get("gu"));
+    if (!sParams.get("gu") || !selRef.current) return ; 
+
+    const gu = sParams.get("gu") ;
+    if (gu) {
+      selRef.current.value = gu ;
+      setGu(gu);
       handleChange();
     }
-    else {
+    
+    if (selRef.current?.value == "") {
       setGu('') ;
-      setAreaFestival([]) ;
+      setAreaFestival([]) ; 
     }
   } , [sParams, area]);
 
@@ -57,12 +62,12 @@ export default function Festival() {
 
     let tm = tdata.map(item => item.GUGUN_NM) ;
     tm = [...new Set(tm)].sort() ;
-    tm = tm.map(item => <option key={item}
+    let tmOp = tm.map(item => <option key={item}
                                 value={item}>
                                   {item}
                         </option>)
     
-    setArea(tm)
+    setArea(tmOp)
   } , [tdata]) ;
 
   return (

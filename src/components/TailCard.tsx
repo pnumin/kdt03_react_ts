@@ -1,9 +1,14 @@
-
-export default function TailCard({ imgurl, title, subtitle, tag }) {
-  let tags = "" ;
+interface TailCardProps {
+  imgurl : string, 
+  title : string, 
+  subtitle : string, 
+  tag :string 
+}
+export default function TailCard({ imgurl, title, subtitle, tag } : TailCardProps ) {
+  let tags : React.ReactElement | React.ReactElement[];
   if ( tag.includes(',') ) {
-    tags = tag.split(',') 
-    tags = tags.map(kw => <span key={kw} 
+    let tm  = tag.split(',') 
+    tags = tm.map(kw => <span key={kw} 
                           className="bg-amber-50 rounded-sm p-2 inline-flex m-1 text-sm">
                               {kw}
                           </span>) ;

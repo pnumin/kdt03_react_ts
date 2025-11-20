@@ -1,4 +1,16 @@
-const BTStyle = {
+type BTSItem = {
+  base : string, 
+  hover : string
+}
+
+type BTS = {
+  blue : BTSItem, 
+  orange : BTSItem, 
+  lime : BTSItem
+}
+
+
+const BTStyle : BTS= {
   blue : {
     base : "bg-blue-500",
     hover : "hover:bg-blue-900",
@@ -11,9 +23,19 @@ const BTStyle = {
     base : "bg-lime-500",
     hover : "hover:bg-lime-900",
   }
+} as const;
+
+type BtColor = keyof BTS ;
+//type BtColor = keyof typeof BTStyle ;
+// type BtColor = 'blue' | 'orange' | 'lime' ;
+
+interface TailButtonProps {
+  color : BtColor, 
+  caption : string, 
+  onHandle : () => void
 }
 
-export default function TailButton({color, caption, onHandle}) {
+export default function TailButton({color, caption, onHandle} : TailButtonProps) {
   const btstyle = BTStyle[color] ;
 
   return (

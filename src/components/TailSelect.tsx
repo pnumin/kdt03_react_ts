@@ -1,5 +1,13 @@
+interface TailSelectProps {
+  id : string, 
+  ref : React.RefObject<HTMLSelectElement>, 
+  title : string, 
+  opk : string[], 
+  opv : string[], 
+  onHandle : () => void
+}
 
-export default function TailSelect({id, ref, title, opk, opv, onHandle}) {
+export default function TailSelect({id, ref, title, opk, opv, onHandle}:TailSelectProps) {
   return (
     <div>
       <label htmlFor={id} 

@@ -1,6 +1,10 @@
-import React from 'react'
+interface TailInputProps {
+  type : string, 
+  name : string, 
+  ref : React.RefObject<HTMLInputElement>
+}
 
-export default function TailInput({type, name, ref}) {
+export default function TailInput({type, name, ref}: TailInputProps) {
   return (
     <div className='w-full'>
       <input type={type} name={name} 
